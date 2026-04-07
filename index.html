@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Merchant Control – คำขอสร้าง User & Role</title>
+  <meta name="description" content="ระบบคำขอสร้างผู้ใช้งานและกำหนดสิทธิ์การเข้าถึง Merchant Control" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ══ SIDEBAR ═══════════════════════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">🏪</div>
+    <span>Merchant<br>Control</span>
+  </div>
+
+  <div class="sidebar-section-title">เมนูหลัก</div>
+  <div class="sidebar-nav">
+    <a class="nav-item active" data-tab="create">
+      <span class="nav-icon">➕</span> เพิ่มผู้ใช้งาน (Batch)
+    </a>
+    <a class="nav-item" data-tab="history">
+      <span class="nav-icon">📋</span> ประวัติคำขอ
+    </a>
+    <a class="nav-item" data-tab="admin">
+      <span class="nav-icon">⚙️</span> จัดการเมนู (Admin)
+    </a>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="user-info">
+      <div class="user-avatar">👤</div>
+      <div>
+        <div class="user-name">ผู้ดูแลระบบ</div>
+        <div class="user-role">admin@merchant.com</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ MAIN CONTENT ═══════════════════════════════════════════ -->
+<div id="main-content">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <h1 id="topbar-title">สร้างผู้ใช้งานใหม่ (Create Users)</h1>
+    <div class="tab-group">
+      <button class="tab-btn active" data-tab="create">➕ เพิ่มผู้ใช้</button>
+      <button class="tab-btn" data-tab="history">📋 ประวัติคำขอ</button>
+      <button class="tab-btn" data-tab="admin">⚙️ Admin</button>
+    </div>
+  </div>
+
+  <!-- ══ CREATE TAB ══════════════════════════════════════════ -->
+  <div class="page-section active" id="tab-create">
+    
+    <!-- Merchant Info Card -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <span class="card-icon">🏪</span> ข้อมูลร้านค้า (ใช้ร่วมกัน)
+      </div>
+      <div class="form-card-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">รหัสร้านค้า (ID)</label>
+            <input type="text" class="form-input" id="merchant-id" placeholder="M-xxxxxx" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">ชื่อร้านค้า</label>
+            <input type="text" class="form-input" id="merchant-name" placeholder="ระบุชื่อร้านค้า" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users Container -->
+    <div id="users-container"></div>
+
+    <!-- Add User Button -->
+    <button class="btn-add-user" id="btn-add-user">
+      <span>➕</span> เพิ่มผู้ใช้งานอีกคน
+    </button>
+
+    <!-- Submit Actions -->
+    <div class="form-card">
+      <div class="form-card-body">
+        <div class="form-actions">
+          <button class="btn-reset" id="btn-reset-form">🔄 รีเซ็ตทั้งหมด</button>
+          <button class="btn-submit" id="btn-submit-form">
+            <span id="submit-text">📤 ส่งคำขอ</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ HISTORY TAB ═════════════════════════════════════════ -->
+  <div class="page-section" id="tab-history">
+    <div class="history-controls">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="ค้นหาชื่อ, อีเมล, รหัสร้านค้า..." />
+      </div>
+      <select class="filter-select" id="filter-status">
+        <option value="">สถานะทั้งหมด</option>
+        <option value="pending">รออนุมัติ</option>
+        <option value="approved">อนุมัติแล้ว</option>
+        <option value="rejected">ปฏิเสธ</option>
+      </select>
+    </div>
+    <div id="history-list"></div>
+  </div>
+
+  <!-- ══ ADMIN TAB ═══════════════════════════════════════════ -->
+  <div class="page-section" id="tab-admin">
+    <div class="form-page-title">⚙️ จัดการเมนู & สิทธิ์</div>
+    <div class="admin-grid">
+      <!-- Categories -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3>📂 หมวดหมู่เมนู</h3>
+          <button class="btn-icon-add" id="btn-add-category">+ เพิ่ม</button>
+        </div>
+        <div class="admin-card-body">
+          <ul class="menu-item-list" id="category-list"></ul>
+          <div class="inline-add" id="inline-add-category" style="display:none">
+            <input type="text" id="new-category-name" placeholder="ชื่อหมวดหมู่ใหม่" />
+            <button id="confirm-add-category">✓</button>
+          </div>
+        </div>
+      </div>
+      <!-- Menu Items -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3>📄 รายการสิทธิ์ (Menu Items)</h3>
+          <button class="btn-icon-add" id="btn-add-menu-item">+ เพิ่ม</button>
+        </div>
+        <div class="admin-card-body">
+          <ul class="menu-item-list" id="menu-items-list"></ul>
+          <div class="inline-add" id="inline-add-menu" style="display:none">
+            <input type="text" id="new-menu-item-name" placeholder="ชื่อรายการ" />
+            <button id="confirm-add-menu-item">✓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
