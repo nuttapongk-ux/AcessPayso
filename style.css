@@ -211,13 +211,38 @@ body {
 .menu-item-list { list-style: none; }
 .menu-item-row { display: flex; align-items: center; padding: 8px 10px; border-radius: 8px; transition: var(--transition); }
 .menu-item-row:hover { background: #f7f8ff; }
-.menu-item-label { flex: 1; font-size: 0.87rem; }
+.menu-item-label { flex: 1; font-size: 0.87rem; display: flex; align-items: center; gap: 8px; }
+.rule-badge { font-size: 0.7rem; font-weight: 600; color: #a4b2da; background: #f0f4ff; border: 1px solid #d4def7; padding: 2px 6px; border-radius: 4px; font-family: monospace; letter-spacing: 0.5px; }
 .menu-item-delete { background: none; border: none; color: #d0d0d0; cursor: pointer; font-size: 14px; padding: 4px; border-radius: 5px; transition: var(--transition); }
 .menu-item-delete:hover { color: var(--danger); background: #fff0f0; }
+.btn-edit-role-preset { padding: 6px 12px; background: #fff; border: 1px solid #d4def7; color: var(--accent-blue); border-radius: 6px; font-size: 0.82rem; font-weight: 600; font-family: inherit; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 4px; }
+.btn-edit-role-preset:hover { background: #f0f4ff; border-color: var(--accent-blue); }
 .menu-cat-header { font-size: 0.78rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 10px 4px; }
 .inline-add { display: flex; gap: 8px; margin-top: 8px; }
 .inline-add input { flex: 1; padding: 7px 12px; border: 1.5px solid var(--border-color); border-radius: 7px; font-size: 0.85rem; font-family: inherit; outline: none; }
 .inline-add input:focus { border-color: var(--accent-blue); }
+.inline-add button { padding: 7px 14px; background: var(--accent-blue); color: #fff; border: none; border-radius: 7px; font-size: 0.82rem; font-weight: 600; font-family: inherit; cursor: pointer; }
+
+/* Drag and Drop Reordering */
+.drag-handle { cursor: grab; padding: 0 8px; color: #a0aec0; font-size: 14px; user-select: none; display: flex; align-items: center; justify-content: center; height: 100%; margin-right: 4px; }
+.drag-handle:active { cursor: grabbing; color: var(--accent-blue); }
+.menu-item-row[draggable="true"] { transition: opacity 0.2s, background 0.2s, border 0.2s; }
+.menu-item-row.dragging { opacity: 0.5; background: #eef2ff !important; border: 1px dashed #b9ccff; box-shadow: inset 0 0 10px rgba(41,82,227,0.1); }
+.menu-item-row.drag-over { border-top: 2px solid var(--accent-blue); background: #f8faff; }
+
+/* Permission detail in history */
+.btn-toggle-perms { background: #f0f4ff; border: 1px solid #d0dcff; color: var(--accent-blue); padding: 6px 14px; border-radius: 7px; font-size: 0.8rem; font-weight: 600; font-family: inherit; cursor: pointer; transition: var(--transition); margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; }
+.btn-toggle-perms:hover { background: #e0eaff; }
+
+.perm-detail-panel { margin-top: 12px; padding: 14px; background: #fafbff; border: 1px solid #e8eeff; border-radius: 10px; }
+.perm-detail-user { margin-bottom: 12px; }
+.perm-detail-user:last-child { margin-bottom: 0; }
+.perm-detail-user-header { font-size: 0.84rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid #eef2ff; }
+.perm-detail-cat { margin-left: 12px; margin-bottom: 4px; }
+.perm-detail-cat-name { font-size: 0.82rem; font-weight: 600; color: var(--accent-blue); }
+.perm-detail-items { margin-left: 20px; margin-top: 2px; }
+.perm-detail-item { display: block; font-size: 0.78rem; color: var(--text-mid); line-height: 1.6; }
+.perm-detail-empty { font-size: 0.8rem; color: var(--text-light); font-style: italic; margin-left: 12px; }
 .inline-add button { padding: 7px 14px; background: var(--accent-blue); color: #fff; border: none; border-radius: 7px; font-size: 0.82rem; font-weight: 600; font-family: inherit; cursor: pointer; }
 
 /* ── TOAST ──────────────────────────────────────────── */

@@ -21,20 +21,20 @@
     <a class="nav-item active" data-tab="create">
       <span class="nav-icon">➕</span> เพิ่มผู้ใช้งาน (Batch)
     </a>
-    <a class="nav-item" data-tab="history">
+    <a class="nav-item restricted-tab" data-tab="history" style="display:none;">
       <span class="nav-icon">📋</span> ประวัติคำขอ
     </a>
-    <a class="nav-item" data-tab="admin">
+    <a class="nav-item restricted-tab" data-tab="admin" style="display:none;">
       <span class="nav-icon">⚙️</span> จัดการเมนู (Admin)
     </a>
   </div>
 
   <div class="sidebar-bottom">
-    <div class="user-info">
+    <div class="user-info" id="sidebar-user-info" style="cursor:pointer;" title="คลิกเพื่อเข้าสู่ระบบ Admin">
       <div class="user-avatar">👤</div>
       <div>
-        <div class="user-name">ผู้ดูแลระบบ</div>
-        <div class="user-role">admin@merchant.com</div>
+        <div class="user-name" id="display-user-name">Guest (ผู้เข้าชม)</div>
+        <div class="user-role" id="display-user-role">คลิกเพื่อเข้าสู่ระบบ</div>
       </div>
     </div>
   </div>
@@ -48,8 +48,8 @@
     <h1 id="topbar-title">สร้างผู้ใช้งานใหม่ (Create Users)</h1>
     <div class="tab-group">
       <button class="tab-btn active" data-tab="create">➕ เพิ่มผู้ใช้</button>
-      <button class="tab-btn" data-tab="history">📋 ประวัติคำขอ</button>
-      <button class="tab-btn" data-tab="admin">⚙️ Admin</button>
+      <button class="tab-btn restricted-tab" data-tab="history" style="display:none;">📋 ประวัติคำขอ</button>
+      <button class="tab-btn restricted-tab" data-tab="admin" style="display:none;">⚙️ Admin</button>
     </div>
   </div>
 
@@ -110,6 +110,9 @@
         <option value="approved">อนุมัติแล้ว</option>
         <option value="rejected">ปฏิเสธ</option>
       </select>
+      <button id="btn-export-csv" style="padding:10px 16px;background:#10b981;color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;margin-left:auto;transition:all 0.2s;display:flex;align-items:center;gap:6px;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter=''">
+        <span>📥</span> Export CSV
+      </button>
     </div>
     <div id="history-list"></div>
   </div>
@@ -128,6 +131,7 @@
           <ul class="menu-item-list" id="category-list"></ul>
           <div class="inline-add" id="inline-add-category" style="display:none">
             <input type="text" id="new-category-name" placeholder="ชื่อหมวดหมู่ใหม่" />
+            <input type="text" id="new-category-ruleId" placeholder="Role/Rule ID *" style="flex:0.6" />
             <button id="confirm-add-category">✓</button>
           </div>
         </div>
@@ -142,13 +146,73 @@
           <ul class="menu-item-list" id="menu-items-list"></ul>
           <div class="inline-add" id="inline-add-menu" style="display:none">
             <input type="text" id="new-menu-item-name" placeholder="ชื่อรายการ" />
+            <input type="text" id="new-menu-item-ruleId" placeholder="Role/Rule ID *" style="flex:0.6" />
             <button id="confirm-add-menu-item">✓</button>
+          </div>
+        </div>
+      </div>
+      <!-- Roles & Presets -->
+      <div class="admin-card" style="grid-column: 1 / -1;">
+        <div class="admin-card-header">
+          <h3>👑 บทบาทและสิทธิ์ตั้งต้น (Role Presets)</h3>
+          <button class="btn-icon-add" id="btn-add-role">+ เพิ่มบทบาท</button>
+        </div>
+        <div class="admin-card-body">
+          <ul class="menu-item-list" id="role-list"></ul>
+          <!-- Role Editor Modal (inline) -->
+          <div id="role-preset-editor" style="display:none;margin-top:20px;padding:16px;border:1px solid #d4def7;border-radius:8px;background:#f8faff;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+              <h4 id="editing-role-title" style="margin:0;color:#1c2552;">แก้ไขสิทธิ์ของ: Admin</h4>
+              <button id="close-role-editor" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:#a0abc0;">✕</button>
+            </div>
+            <div class="perm-toolbar">
+               <button type="button" class="perm-btn" id="preset-select-all">เลือกทั้งหมด</button>
+               <button type="button" class="perm-btn" id="preset-clear-all">ล้าง</button>
+            </div>
+            <ul class="perm-tree" id="preset-perm-tree"></ul>
+            <div style="display:flex;gap:8px;margin-top:16px;">
+               <button id="save-role-preset" style="padding:8px 16px;background:#3c63e2;color:#fff;border:none;border-radius:6px;cursor:pointer;">💾 บันทึกสิทธิ์ตั้งต้น</button>
+               <button id="delete-role-btn" style="padding:8px 16px;background:#ffe5e5;color:#e53e3e;border:1px solid #fcbcbc;border-radius:6px;cursor:pointer;">🗑️ ลบบทบาทนี้</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+</div>
+
+<!-- Admin Login Modal (Firebase Auth) -->
+<div id="admin-login-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,12,38,0.4);backdrop-filter:blur(3px);z-index:10000;align-items:center;justify-content:center;">
+  <div style="background:#fff;padding:28px 32px;border-radius:12px;width:340px;box-shadow:0 12px 30px rgba(0,0,0,0.15);border:1px solid rgba(255,255,255,0.7);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+      <span style="font-size:1.5rem">🔐</span>
+      <h3 style="margin:0;font-size:1.15rem;color:#1c2552;">เข้าสู่ระบบ Admin</h3>
+    </div>
+    
+    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#6b7ab4;font-weight:500;">อีเมล</label>
+    <input type="email" id="login-email" placeholder="admin@merchant.com" style="width:100%;padding:12px;border:1.5px solid #d4def7;border-radius:8px;margin-bottom:16px;font-size:0.95rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='#3c63e2'" onblur="this.style.borderColor='#d4def7'" />
+    
+    <label style="display:block;margin-bottom:6px;font-size:0.85rem;color:#6b7ab4;font-weight:500;">รหัสผ่าน</label>
+    <input type="password" id="login-password" placeholder="••••••••" style="width:100%;padding:12px;border:1.5px solid #d4def7;border-radius:8px;margin-bottom:24px;font-size:0.95rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='#3c63e2'" onblur="this.style.borderColor='#d4def7'" />
+    
+    <div style="display:flex;justify-content:flex-end;gap:12px;">
+      <button id="login-cancel" style="padding:10px 18px;background:#f0f4ff;color:#6b7ab4;font-weight:600;border:none;border-radius:8px;cursor:pointer;font-family:inherit;transition:all 0.2s;" onmouseover="this.style.background='#e2eafe'" onmouseout="this.style.background='#f0f4ff'">ยกเลิก</button>
+      <button id="login-confirm" style="padding:10px 18px;background:#3c63e2;color:#fff;font-weight:600;border:none;border-radius:8px;cursor:pointer;font-family:inherit;transition:all 0.2s;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter=''">เข้าสู่ระบบ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Prompt Modal -->
+<div id="custom-prompt-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,12,38,0.4);backdrop-filter:blur(3px);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;padding:24px 28px;border-radius:12px;width:340px;box-shadow:0 12px 30px rgba(0,0,0,0.15);border:1px solid rgba(255,255,255,0.7);">
+    <h3 id="c-prompt-title" style="margin-top:0;font-size:1.05rem;color:#1c2552;margin-bottom:14px;line-height:1.4;"></h3>
+    <input type="text" id="c-prompt-input" style="width:100%;padding:10px 12px;border:1.5px solid #d4def7;border-radius:8px;margin-bottom:20px;font-size:0.95rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='#3c63e2'" onblur="this.style.borderColor='#d4def7'"/>
+    <div style="display:flex;justify-content:flex-end;gap:12px;">
+      <button id="c-prompt-cancel" style="padding:8px 18px;background:#f0f4ff;color:#6b7ab4;font-weight:600;border:none;border-radius:8px;cursor:pointer;font-family:inherit;transition:all 0.2s;" onmouseover="this.style.background='#e2eafe'" onmouseout="this.style.background='#f0f4ff'">ยกเลิก</button>
+      <button id="c-prompt-confirm" style="padding:8px 18px;background:#3c63e2;color:#fff;font-weight:600;border:none;border-radius:8px;cursor:pointer;font-family:inherit;transition:all 0.2s;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter=''">บันทึก</button>
+    </div>
+  </div>
 </div>
 
 <!-- Toast Container -->
