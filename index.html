@@ -12,8 +12,7 @@
 <!-- ══ SIDEBAR ═══════════════════════════════════════════════ -->
 <nav id="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-icon">🏪</div>
-    <span>Merchant<br>Control</span>
+    <img class="logo-img" src="https://payso.co/_app/immutable/assets/Payso_logo.CRWy1N_-.png" alt="Payso Logo" />
   </div>
 
   <div class="sidebar-section-title">เมนูหลัก</div>
@@ -27,6 +26,7 @@
     <a class="nav-item restricted-tab" data-tab="admin" style="display:none;">
       <span class="nav-icon">⚙️</span> จัดการเมนู (Admin)
     </a>
+
   </div>
 
   <div class="sidebar-bottom">
@@ -37,6 +37,9 @@
         <div class="user-role" id="display-user-role">คลิกเพื่อเข้าสู่ระบบ</div>
       </div>
     </div>
+    <button id="btn-logout" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='#fff5f5'" style="display:none; width:100%; margin-top:12px; padding:10px; border:1px solid #fecaca; background:#fff5f5; color:#e53e3e; border-radius:8px; cursor:pointer; font-weight:700; font-size:0.85rem; transition:0.2s;">
+      🚪 ออกจากระบบ (Logout)
+    </button>
   </div>
 </nav>
 
@@ -50,6 +53,7 @@
       <button class="tab-btn active" data-tab="create">➕ เพิ่มผู้ใช้</button>
       <button class="tab-btn restricted-tab" data-tab="history" style="display:none;">📋 ประวัติคำขอ</button>
       <button class="tab-btn restricted-tab" data-tab="admin" style="display:none;">⚙️ Admin</button>
+
     </div>
   </div>
 
@@ -106,8 +110,8 @@
       </div>
       <select class="filter-select" id="filter-status">
         <option value="">สถานะทั้งหมด</option>
-        <option value="pending">รออนุมัติ</option>
-        <option value="approved">อนุมัติแล้ว</option>
+        <option value="pending">อยู่ระหว่างดำเนินการ</option>
+        <option value="approved">ดำเนินการเรียบร้อย</option>
         <option value="rejected">ปฏิเสธ</option>
       </select>
       <button id="btn-export-csv" style="padding:10px 16px;background:#10b981;color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;margin-left:auto;transition:all 0.2s;display:flex;align-items:center;gap:6px;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter=''">
@@ -116,6 +120,8 @@
     </div>
     <div id="history-list"></div>
   </div>
+
+
 
   <!-- ══ ADMIN TAB ═══════════════════════════════════════════ -->
   <div class="page-section" id="tab-admin">
@@ -168,6 +174,10 @@
             <div class="perm-toolbar">
                <button type="button" class="perm-btn" id="preset-select-all">เลือกทั้งหมด</button>
                <button type="button" class="perm-btn" id="preset-clear-all">ล้าง</button>
+            </div>
+            <div class="form-group" style="margin:12px 0">
+              <label class="form-label" style="font-size:0.85rem;color:#6b7ab4;">📝 คำอธิบายบทบาท (แสดงในฟอร์มสร้างผู้ใช้)</label>
+              <textarea id="role-preset-description" rows="2" placeholder="เช่น: สามารถดูรายงานยอดขายและข้อมูลร้านค้า..." style="width:100%;padding:10px;border:1.5px solid #d4def7;border-radius:8px;font-family:inherit;font-size:0.9rem;resize:none;outline:none;" onfocus="this.style.borderColor='#3c63e2'" onblur="this.style.borderColor='#d4def7'"></textarea>
             </div>
             <ul class="perm-tree" id="preset-perm-tree"></ul>
             <div style="display:flex;gap:8px;margin-top:16px;">

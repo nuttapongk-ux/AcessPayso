@@ -40,14 +40,11 @@ body {
   z-index: 100;
   box-shadow: 4px 0 24px rgba(13, 32, 128, 0.3);
 }
-.sidebar-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
-.sidebar-logo .logo-icon {
-  width: 44px; height: 44px;
-  background: rgba(255,255,255,0.15); border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px;
+.sidebar-logo { display: flex; align-items: center; justify-content: center; margin-bottom: 28px; }
+.sidebar-logo .logo-img {
+  height: 36px; width: auto; object-fit: contain;
+  filter: brightness(0) invert(1);
 }
-.sidebar-logo span { color: #fff; font-size: 1rem; font-weight: 700; line-height: 1.2; }
 .sidebar-section-title { color: rgba(255,255,255,0.5); font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin: 8px 4px; }
 
 .sidebar-nav { flex: 1; }
@@ -253,6 +250,7 @@ body {
 .toast-msg { flex: 1; font-weight: 500; }
 @keyframes slideIn { from { opacity:0; transform: translateX(40px); } to { opacity:1; transform: translateX(0); } }
 @keyframes fadeOut { to { opacity: 0; transform: translateX(40px); } }
+@keyframes fadeInDesc { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-thumb { background: #d0d8f0; border-radius: 3px; }
